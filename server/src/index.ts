@@ -1,41 +1,16 @@
 import express from "express";
-import {userModel} from "./db.js";
+import { connectDB } from "./config/dbconnect.js";
+import dotenv from "dotenv";
+import authRouter from "./routes/authRoute.js";
 const app=express();
 
 app.use(express.json());
+dotenv.config();
+connectDB();
+
+app.use('',authRouter);
 
 
-app.post('/api/v1/signup',async(req,res)=>{
-    const {username,password}=req.body;
-    try{
-        if(username.length()<3 || username.length()>11 || !username)
-        {
-            res.status(411).send("error in username");
-        }
-        if(password.length()<3 || password.length()>11 || !password)
-        {
-            res.status(411).send("error in password");
-        }
-        const User=await userModel.findOne({username});
-        if(User!=null)
-        {
-            res.status(403).send("User already exists with this username");
-        }
-        const user=userModel.create({
-            username,password
-        });
-        res.json(
-            {
-                username,
-                password
-            }
-        );
-    }
-    catch(err)
-    {
-        res.status(500).send(err);
-    }
-})
 
 
 
