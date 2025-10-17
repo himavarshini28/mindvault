@@ -29,7 +29,7 @@ const tagSchema=new mongoose.Schema(
     }
 )
 
-const contentEnum=["image","video","article","audio"];
+const contentEnum=["document","tweet","youtube","link"];
 
 const contentSchema=new mongoose.Schema(
     {
@@ -42,7 +42,6 @@ const contentSchema=new mongoose.Schema(
         {
             type:String,
             enum:contentEnum,
-            required:true 
         },
         title:
         {

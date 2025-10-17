@@ -22,6 +22,7 @@ authRouter.post('/api/v1/signup',async(req,res)=>{
         {
             return res.status(403).send("User already exists with this username");
         }
+        //todo:bcrypt
         const user=await userModel.create({
             username,password
         });
@@ -45,7 +46,7 @@ authRouter.post('/api/v1/signin',async(req,res)=>
    { const user=await userModel.findOne({username,password});
     if(user)
     {
-        const token=jwt.sign({username},jwt_secret_key);
+        const token=jwt.sign({userId:user._id},jwt_secret_key);
         return res.json({token});
     }
     else{
