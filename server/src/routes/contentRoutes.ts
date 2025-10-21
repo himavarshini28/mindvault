@@ -24,6 +24,24 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
         return res.status(500).json({message: "Error creating content", error});
     }
 })
-// contentRouter.get("/api/v1/content",)
-// contentRouter.delete("/api/v1/content",)
+    contentRouter.get("/api/v1/content",async(req,res)=>{
+        //@ts-ignore
+        const userId=req.userId;
+        try
+        {const content=await contentModel.find({userId});
+        return res.status(200).json({content});}
+        catch(err)
+        {
+            return res.status(500).json({message:err});
+        }
+    })
+    contentRouter.delete("/api/v1/content",async(req,res)=>{
+        const contentId=req.body.contentId;
+        try {
+            await contentModel.deleteOne({_id:contentId});
+            res.status(200).json({message:"successfully deleted"});
+        } catch (error) {
+            res.status(500).json({"message":error});
+        }
+    })
 export default contentRouter;
