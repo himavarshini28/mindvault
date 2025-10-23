@@ -57,6 +57,10 @@ const contentSchema=new mongoose.Schema(
         {
             type:mongoose.Types.ObjectId,
             required:true,
+        },
+        embedding:{
+            type:[Number],
+            required:false
         }
     }
 )
