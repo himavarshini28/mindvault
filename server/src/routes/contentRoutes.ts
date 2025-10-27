@@ -9,8 +9,8 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
     //@ts-ignore
     const userId=req.userId;
     
-    console.log("Content route - userId from req:", userId); // Debug log
-    console.log("Content route - body:", {link, type, title, tags}); // Debug log
+    console.log("Content route - userId from req:", userId);
+    console.log("Content route - body:", {link, type, title, tags});
     
     try {
         if(!userId) {
@@ -20,7 +20,7 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
         const content=await contentModel.create({link,type,title,tags,userId});
         return res.json({message: "Content created successfully", content});
     } catch (error) {
-        console.error("Content creation error:", error); // Debug log
+        console.error("Content creation error:", error);
         return res.status(500).json({message: "Error creating content", error});
     }
 })

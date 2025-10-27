@@ -10,7 +10,7 @@ export const authMiddleware=async(req:Request,res:Response,next:NextFunction)=>{
         if(!token) return res.status(403).json({message:"Authorization header missing"});
         
         const decode = jwt.verify(token, jwt_secret_key) as any;
-        console.log("Decoded token:", decode); // Debug log
+        console.log("Decoded token:", decode);
         
         if(!decode.userId) {
             return res.status(401).json({
@@ -22,7 +22,7 @@ export const authMiddleware=async(req:Request,res:Response,next:NextFunction)=>{
         //@ts-ignore
         req.userId = decode.userId;
         //@ts-ignore
-        console.log("User ID set on request:", req.userId); // Debug log
+        console.log("User ID set on request:", req.userId);
         next();
     }
     catch(err)
