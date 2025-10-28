@@ -61,6 +61,10 @@ const contentSchema=new mongoose.Schema(
         embedding:{
             type:[Number],
             required:false
+        },
+        content:{
+            type:String,
+            required:false
         }
     }
 )

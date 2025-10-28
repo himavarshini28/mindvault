@@ -16,6 +16,7 @@ interface CreateContentModalProps {
 }
 
 export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
+    const contentRef=useRef<HTMLTextAreaElement>(null);
     const titleRef = useRef<HTMLInputElement>(null);
     const linkRef = useRef<HTMLInputElement>(null);
     const [type, setType] = useState<string>(ContentType.Youtube);
@@ -23,6 +24,7 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
     async function addContent() {
         const title = titleRef.current?.value;
         const link = linkRef.current?.value;
+        const content=contentRef.current?.value;
 
         if (!title || !link) {
             alert("Please enter both title and link");
@@ -41,7 +43,8 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                 link,
                 title,
                 type,
-                tags: []
+                tags: [],
+                content
             }, {
                 headers: {
                     "authorization": token
@@ -50,6 +53,7 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
 
             if (titleRef.current) titleRef.current.value = "";
             if (linkRef.current) linkRef.current.value = "";
+            if(contentRef.current) contentRef.current.value="";
             onClose();
             alert("Content added successfully!");
         } catch (error: unknown) {
@@ -82,6 +86,11 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                                 <div>
                                     <Input reference={titleRef} placeholder="Title" />
                                     <Input reference={linkRef} placeholder="Link" />
+                                    <textarea
+    ref={contentRef}
+    placeholder="Paste the actual content (tweet text, article summary, etc.)"
+    className="w-full border rounded p-2 min-h-[100px]"
+/>
                                 </div>
                                 <div>
                                     <h1>Type</h1>

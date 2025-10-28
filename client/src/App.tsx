@@ -2,7 +2,7 @@ import { Signin } from "./pages/Signin";
 import { Signup } from "./pages/Signup";
 import { Share } from "./pages/Share";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Dashboard } from "./pages/dashboard";
+import { Dashboard } from "./pages/Dashboard";
 
 function App() {
   return (

@@ -9,9 +9,49 @@ import { useContent } from "../hooks/useContent"
 import { BACKEND_URL } from "../config.ts"
 import axios from "axios"
 
+interface Content {
+  _id: string;
+  link: string;
+  type: "tweet" | "youtube" | "twitter";
+  title: string;
+  tags: string[];
+  userId: string;
+}
+
 export function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
   const {contents, refresh} = useContent();
+  const [searchQuery,setSearchQuery]=useState("");
+  const [searchResults,setSearchResults]=useState<Content[]>([]);
+  const [isSearching,setIsSearching]=useState(false);
+
+  const handleSearch=async()=>{
+    if(!searchQuery.trim())
+    {
+      setIsSearching(false);
+      setSearchResults([]);
+      return;
+    }
+    try{
+      setIsSearching(true);
+      const response=await axios.get(`${BACKEND_URL}/api/v1/content/search`,{
+        params:{query:searchQuery},
+        headers:{"authorization":localStorage.getItem("token")}
+      });
+      setSearchResults(response.data.content);
+    }
+    catch(error)
+    {
+      console.error("Error searching",error);
+      alert("Search failed. Please try again");
+    }
+  };
+
+  const handleClearSearch=async()=>{
+    setIsSearching(false);
+    setSearchQuery("");
+    setSearchResults([]);
+  }
 
   useEffect(() => {
     refresh();
@@ -28,6 +68,10 @@ export function Dashboard() {
         }
       });
       refresh();
+      if(isSearching)
+      {
+        handleSearch();
+      }
     } catch (error) {
       console.error("Error deleting content:", error);
       alert("Failed to delete content. Please try again.");
@@ -40,6 +84,18 @@ export function Dashboard() {
       
       <div className="p-4 ml-72 min-h-screen bg-gray-100 border-2">
         <CreateContentModal open={modalOpen} onClose={() => setModalOpen(false)} />
+          <div className="flex justify-end">
+          <div className="flex gap-2 px-4">
+            <input placeholder="search: e.g., 'tweet about mindvault'" value={searchQuery}
+            onChange={(e)=>setSearchQuery(e.target.value)}
+            onKeyDown={(e)=>e.key=='Enter' && handleSearch()}
+            className=" w-96 px-4 py-2 border rounded-md" />
+            <Button variant="primary" text="search" onClick={handleSearch}/>
+            {isSearching && 
+            (
+              <Button variant="secondary" text="clear" onClick={handleClearSearch}/>
+            )}
+          </div>
         
         <div className="flex justify-end gap-4">
           <Button onClick={() => setModalOpen(true)} variant="primary" text="Add content" startIcon={<PlusIcon />} />
@@ -61,9 +117,10 @@ export function Dashboard() {
               }
           }} variant="secondary" text="Share brain" startIcon={<ShareIcon />} />
         </div>
+        </div>
 
         <div className="flex gap-4 flex-wrap">
-          {contents.map((content) => (
+          {(isSearching ? searchResults:contents).map((content) => (
             <Card 
                 key={content._id || content.link} 
                 type={content.type} 
