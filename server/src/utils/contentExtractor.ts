@@ -1,4 +1,8 @@
+import { TwitterApi } from 'twitter-api-v2';
 import { Innertube } from "youtubei.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const extractYoutubeContent = async (url: string): Promise<string> => {
   try {
@@ -15,16 +19,13 @@ export const extractYoutubeContent = async (url: string): Promise<string> => {
 
     console.log("📝 Fetching transcript...");
     
-    // Get transcript - the API returns a different structure
     const transcriptData = await info.getTranscript();
     
-    // Access the transcript content correctly
     const segments = transcriptData?.transcript?.content?.body?.initial_segments;
     
     if (!segments || segments.length === 0) {
       console.log("⚠️ No transcript found, falling back to video metadata");
       
-      // Fallback to title + description
       const title = info.basic_info.title || '';
       const description = info.basic_info.short_description || '';
       const content = `${title}. ${description}`;
@@ -33,7 +34,6 @@ export const extractYoutubeContent = async (url: string): Promise<string> => {
       return content;
     }
 
-    // Extract text from segments
     const fullText = segments
       .map((segment: any) => segment.snippet?.text || '')
       .filter((text: string) => text.length > 0)
@@ -47,18 +47,46 @@ export const extractYoutubeContent = async (url: string): Promise<string> => {
   } catch (error) {
     console.error("❌ YouTube extraction failed:", error);
     
-    // If transcript fails completely, return a basic message
-    // This prevents the whole process from crashing
     return "YouTube video - transcript not available";
   }
 };
 
-// Test
-extractYoutubeContent("https://www.youtube.com/watch?v=z6kta72-RpQ&t=1s")
-  .then(result => {
-    console.log("\n🎉 Final result length:", result.length);
-  })
-  .catch(err => {
-    console.error("Test failed:", err);
-  });
+
+export const extractTwitterContent = async (url: string): Promise<string> => {
+  try {
+    console.log("🐦 Extracting Twitter content using API");
+
+    const tweetIdMatch = url.match(/status\/(\d+)/);
+    if (!tweetIdMatch) throw new Error("Invalid Twitter URL");
+    
+    const tweetId = tweetIdMatch[1];
+    console.log("📝 Tweet ID:", tweetId);
+    if(!tweetId)
+    throw new Error("tweetId cant be fetched");
+
+    const bearerToken = process.env.TWITTER_BEARER_TOKEN ;
+    if (!bearerToken) {
+      throw new Error("TWITTER_BEARER_TOKEN not found in .env");
+    }
+
+    const client = new TwitterApi(bearerToken);
+
+    // Fetch tweet data
+    const tweet = await client.v2.singleTweet(tweetId, {
+      'tweet.fields': ['text', 'author_id', 'created_at'],
+    });
+
+    const tweetText = tweet.data.text;
+    console.log("✅ Extracted tweet:", tweetText.length, "chars");
+    console.log("📄 Content:", tweetText);
+
+    return tweetText;
+
+  } catch (error) {
+    console.error("❌ Twitter API failed:", error);
+    throw error;
+  }
+};
+
+extractTwitterContent("https://x.com/caps_raunak/status/1983057302166090035");
 
