@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { Button } from "../components/Button";
-import { Input } from "../components/Input";
 import axios from "axios";
 import { BACKEND_URL } from "../config.ts";
 import { useNavigate } from "react-router-dom";
+import { Logo } from "../icons/Logo.tsx";
 
 export function Signup() {
     const usernameRef = useRef<HTMLInputElement>(null); 
@@ -54,13 +54,73 @@ export function Signup() {
     }
 
     return (
-        <div className="h-screen w-screen bg-gray-200 flex justify-center items-center">
-            <div className="bg-white rounded-xl border min-w-48 p-8">
-                <Input reference={usernameRef} placeholder="Username" />
-                <Input reference={passwordRef} placeholder="Password" />
-                <div className="flex justify-center pt-4">
-                    <Button onClick={signup} loading={false} variant="primary" text="Signup" fullWidth={true} />
+        <div className="h-screen w-screen flex">
+            <div className="w-1/2 flex items-center justify-center p-12 bg-white">
+                <div className="w-full max-w-md space-y-8">
+                    <div className="text-center">
+                        <div className="flex justify-center mb-6">
+                            <span><Logo/></span>
+                            <span className="text-2xl font-bold text-purple-600">
+                                      MindVault
+                                    </span>
+                        </div>
+                        <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                            Create Account
+                        </h2>
+                        <p className="text-gray-600">Start building your second brain</p>
+                    </div>
+
+                    <div className="space-y-5">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Username
+                            </label>
+                            <input ref={usernameRef} placeholder="Enter your username" className=" border border-gray-300 w-[450px] py-2 px-2 rounded-md"/>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Password
+                            </label>
+                             <input ref={passwordRef} placeholder="Enter your password" className=" border border-gray-300 w-[450px] py-2 px-2 rounded-md mb-3"/>
+                        </div>
+                        <Button 
+                            onClick={signup} 
+                            loading={false} 
+                            variant="primary" 
+                            text="Create Account" 
+                            fullWidth={true} 
+                        />
+
+                        <div className="text-center pt-2">
+                            <p className="text-sm text-gray-600">
+                                Already have an account?{" "}
+                                <button
+                                    onClick={() => navigate("/signin")}
+                                    className="text-purple-600 font-medium hover:text-purple-700"
+                                >
+                                    Sign in
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+
+                   
                 </div>
+            </div>
+
+           <div className="w-1/2 bg-slate-50 flex items-center justify-center p-12 relative">
+                <button
+                    onClick={() => navigate("/")}
+                    className="absolute top-6 left-6 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span className="text-sm font-medium">Back to Home</span>
+                </button>
+
+                <img src="src\assets\10782895_19199299.svg"/>
             </div>
         </div>
     );

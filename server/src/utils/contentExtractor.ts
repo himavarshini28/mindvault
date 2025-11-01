@@ -1,8 +1,6 @@
 import { TwitterApi } from 'twitter-api-v2';
 import { Innertube } from "youtubei.js";
-import dotenv from "dotenv";
 
-dotenv.config();
 
 export const extractYoutubeContent = async (url: string): Promise<string> => {
   try {
@@ -88,5 +86,5 @@ export const extractTwitterContent = async (url: string): Promise<string> => {
   }
 };
 
-extractTwitterContent("https://x.com/caps_raunak/status/1983057302166090035");
+
 

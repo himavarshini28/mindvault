@@ -119,7 +119,7 @@ export function Dashboard() {
         </div>
         </div>
 
-        <div className="flex gap-4 flex-wrap">
+        <div className="flex gap-4 flex-wrap pt-5">
           {(isSearching ? searchResults:contents).map((content) => (
             <Card 
                 key={content._id || content.link} 

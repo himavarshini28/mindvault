@@ -24,9 +24,10 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "jsdom": "^27.0.1",
+    "jsdom": "^27.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
+    "puppeteer": "^24.27.0",
     "twitter-api-v2": "^1.27.0",
     "youtube-transcript": "^1.2.1",
     "youtubei.js": "^16.0.1"

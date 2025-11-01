@@ -40,9 +40,7 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
             <div className="p-4 bg-white rounded-md border-gray-200 max-w-72 border min-h-48 min-w-72">
                 <div className="flex justify-between">
                     <div className="flex items-center text-md">
-                        <div className="text-gray-500 pr-2">
-                            <ShareIcon />
-                        </div>
+                       
                         {title}
                     </div>
                     <div className="flex items-center gap-2">
@@ -61,7 +59,8 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                     </div>
                 </div>
 
-                <div className="pt-4">
+                <div className=" bg-white rounded-md border-gray-200 max-w-72 h-[170px] flex flex-col">
+                    <div className="pt-4 flex-1 overflow-auto no-scrollbar">
                     {type === "youtube" && (
                         <iframe
                             className="w-full"
@@ -89,6 +88,7 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                             </a>
                         </div>
                     )}
+                    </div>
                 </div>
             </div>
         </div>

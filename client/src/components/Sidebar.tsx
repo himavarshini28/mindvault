@@ -1,3 +1,4 @@
+import LinkedinIcon from "../icons/LinkedinIcon";
 import { Logo } from "../icons/Logo";
 import { TwitterIcon } from "../icons/TwitterIcon";
 import { YoutubeIcon } from "../icons/YoutubeIcon";
@@ -9,11 +10,12 @@ export function Sidebar() {
             <div className="pr-2 text-purple-600">
                 <Logo />
             </div>
-            Brainly
+            MindVault
         </div>
         <div className="pt-8 pl-4">
             <SidebarItem text="Twitter" icon={<TwitterIcon />} />
             <SidebarItem text="Youtube" icon={<YoutubeIcon />} />
+            <SidebarItem text="LinkedIn" icon ={<LinkedinIcon/>}/>
         </div>
     </div>
 }
