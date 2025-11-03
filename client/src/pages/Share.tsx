@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { BACKEND_URL } from "../config";
+import api from "../lib/api";
 import { Card } from "../components/Card";
 
 interface SharedContent {
@@ -21,7 +20,7 @@ export function Share() {
     useEffect(() => {
         async function fetchSharedContent() {
             try {
-                const response = await axios.get(`${BACKEND_URL}/api/v1/brain/${shareId}`);
+                const response = await api.get(`/api/v1/brain/${shareId}`);
                 setContents(response.data.content);
                 setUsername(response.data.username);
                 setLoading(false);
@@ -39,27 +38,27 @@ export function Share() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-                <div className="text-xl text-gray-600">Loading...</div>
+            <div className="min-h-screen bg-[#071029] flex items-center justify-center text-white">
+                <div className="text-xl text-gray-300">Loading...</div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-                <div className="text-xl text-red-600">{error}</div>
+            <div className="min-h-screen bg-[#071029] flex items-center justify-center text-white">
+                <div className="text-xl text-red-400">{error}</div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 p-8">
+        <div className="min-h-screen bg-[#071029] p-8 text-white">
             <div className="max-w-7xl mx-auto mb-8">
-                <h1 className="text-3xl font-bold text-gray-800">
+                <h1 className="text-3xl font-bold text-white">
                     {username}'s Brain
                 </h1>
-                <p className="text-gray-600 mt-2">
+                <p className="text-gray-400 mt-2">
                     Shared collection of {contents.length} item{contents.length !== 1 ? 's' : ''}
                 </p>
             </div>

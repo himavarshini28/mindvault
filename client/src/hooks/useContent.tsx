@@ -1,6 +1,5 @@
-import axios from "axios";
+import api from "../lib/api";
 import { useEffect, useState } from "react";
-import { BACKEND_URL } from "../config.ts";
 
 interface Content {
     _id: string;
@@ -15,11 +14,7 @@ export function useContent() {
     const [contents, setContents] = useState<Content[]>([]);
 
     function refresh() {
-        axios.get(`${BACKEND_URL}/api/v1/content`, {
-            headers: {
-                "authorization": localStorage.getItem("token")
-            }
-        })
+        api.get(`/api/v1/content`)
             .then((response: { data: { content: Content[] } }) => {
                 setContents(response.data.content);
             })

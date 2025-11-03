@@ -6,8 +6,7 @@ import { PlusIcon } from "../icons/PlusIcon"
 import { ShareIcon } from "../icons/ShareIcon"
 import { Sidebar } from "../components/Sidebar"
 import { useContent } from "../hooks/useContent"
-import { BACKEND_URL } from "../config.ts"
-import axios from "axios"
+import api from "../lib/api";
 
 interface Content {
   _id: string;
@@ -34,10 +33,7 @@ export function Dashboard() {
     }
     try{
       setIsSearching(true);
-      const response=await axios.get(`${BACKEND_URL}/api/v1/content/search`,{
-        params:{query:searchQuery},
-        headers:{"authorization":localStorage.getItem("token")}
-      });
+      const response=await api.get(`/api/v1/content/search`,{ params:{query:searchQuery} });
       setSearchResults(response.data.content);
     }
     catch(error)
@@ -59,14 +55,7 @@ export function Dashboard() {
 
   const handleDelete = async (contentId: string) => {
     try {
-      await axios.delete(`${BACKEND_URL}/api/v1/content`, {
-        headers: {
-          "authorization": localStorage.getItem("token")
-        },
-        data: {
-          contentId: contentId
-        }
-      });
+      await api.delete(`/api/v1/content`, { data: { contentId: contentId } });
       refresh();
       if(isSearching)
       {
@@ -78,18 +67,18 @@ export function Dashboard() {
     }
   };
 
-  return (
+    return (
     <div>
       <Sidebar />
       
-      <div className="p-4 ml-72 min-h-screen bg-gray-100 border-2">
+      <div className="p-4 ml-72 min-h-screen bg-[#071029] border-2 border-gray-800 text-white">
         <CreateContentModal open={modalOpen} onClose={() => setModalOpen(false)} />
           <div className="flex justify-end">
           <div className="flex gap-2 px-4">
-            <input placeholder="search: e.g., 'tweet about mindvault'" value={searchQuery}
+            <input placeholder="search: e.g., 'tweet about DigiBrain'" value={searchQuery}
             onChange={(e)=>setSearchQuery(e.target.value)}
             onKeyDown={(e)=>e.key=='Enter' && handleSearch()}
-            className=" w-96 px-4 py-2 border rounded-md" />
+            className=" w-96 px-4 py-2 border border-gray-700 bg-[#0b1220] text-white rounded-md" />
             <Button variant="primary" text="search" onClick={handleSearch}/>
             {isSearching && 
             (
@@ -102,13 +91,7 @@ export function Dashboard() {
           
           <Button onClick={async () => {
               try {
-                  const response = await axios.post(`${BACKEND_URL}/api/v1/share/brain`, {
-                      share: true
-                  }, {
-                      headers: {
-                          "authorization": localStorage.getItem("token")
-                      }
-                  });
+          const response = await api.post(`/api/v1/share/brain`, { share: true });
                   const shareUrl = `http://localhost:5173/share/${response.data.hash}`;
                   alert(shareUrl);
               } catch (error) {

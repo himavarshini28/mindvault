@@ -37,20 +37,20 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
 
     return (
         <div>
-            <div className="p-4 bg-white rounded-md border-gray-200 max-w-72 border min-h-48 min-w-72">
+            <div className="p-4 bg-[#0f1724] rounded-md border border-gray-800 max-w-72 min-h-48 min-w-72 text-white">
                 <div className="flex justify-between">
                     <div className="flex items-center text-md">
                        
                         {title}
                     </div>
                     <div className="flex items-center gap-2">
-                        <a href={link} target="_blank" className="text-gray-500 hover:text-gray-700 cursor-pointer">
+                        <a href={link} target="_blank" className="text-gray-400 hover:text-gray-200 cursor-pointer">
                             <ShareIcon />
                         </a>
                         {onDelete && contentId && (
                             <button 
                                 onClick={handleDelete}
-                                className="text-gray-500 hover:text-red-600 cursor-pointer"
+                                className="text-gray-400 hover:text-red-400 cursor-pointer"
                                 aria-label="Delete content"
                             >
                                 <DeleteIcon />
@@ -59,8 +59,8 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                     </div>
                 </div>
 
-                <div className=" bg-white rounded-md border-gray-200 max-w-72 h-[170px] flex flex-col">
-                    <div className="pt-4 flex-1 overflow-auto no-scrollbar">
+                <div className=" bg-[#071029] rounded-md border border-gray-800 max-w-72 h-[170px] flex flex-col">
+                    <div className="pt-4 flex-1 overflow-auto no-scrollbar text-gray-200">
                     {type === "youtube" && (
                         <iframe
                             className="w-full"

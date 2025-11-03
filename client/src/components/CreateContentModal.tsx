@@ -2,8 +2,9 @@ import { useRef, useState } from "react";
 import { CrossIcon } from "../icons/CrossIcon";
 import { Button } from "./Button";
 import { Input } from "./Input";
-import { BACKEND_URL } from "../config.ts";
+import api from "../lib/api";
 import axios from "axios";
+import { useAuth } from "../store/useAuth";
 
 const ContentType = {
     Youtube: "youtube",
@@ -32,23 +33,20 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
         }
 
         try {
-            const token = localStorage.getItem("token");
-            
+            const token = useAuth.getState().token;
+
             if (!token) {
                 alert("Please sign in first");
                 return;
             }
 
-            await axios.post(`${BACKEND_URL}/api/v1/content`, {
+            await api.post(`/api/v1/content`, {
                 link,
                 title,
                 type,
                 tags: [],
                 content
             }, {
-                headers: {
-                    "authorization": token
-                }
             });
 
             if (titleRef.current) titleRef.current.value = "";
@@ -74,23 +72,23 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
         <div>
             {open && (
                 <div>
-                    <div className="w-screen h-screen bg-slate-500 fixed top-0 left-0 opacity-60 flex justify-center"></div>
-                    <div className="w-screen h-screen fixed top-0 left-0 flex justify-center">
-                        <div className="flex flex-col justify-center">
-                            <span className="bg-white opacity-100 p-4 rounded fixed">
+                        <div className="w-screen h-screen bg-black/60 fixed top-0 left-0 opacity-100 flex justify-center"></div>
+                        <div className="w-screen h-screen fixed top-0 left-0 flex justify-center">
+                            <div className="flex flex-col justify-center">
+                                <span className="bg-[#0f1724] opacity-100 p-4 rounded fixed border border-gray-800 text-white">
                                 <div className="flex justify-end">
                                     <div onClick={onClose} className="cursor-pointer">
                                         <CrossIcon />
                                     </div>
                                 </div>
                                 <div>
-                                    <Input reference={titleRef} placeholder="Title" />
-                                    <Input reference={linkRef} placeholder="Link" />
-                                    <textarea
-    ref={contentRef}
-    placeholder="Paste the actual content (tweet text, article summary, etc.)"
-    className="w-full border rounded p-2 min-h-[100px]"
-/>
+                                        <Input reference={titleRef} placeholder="Title" />
+                                        <Input reference={linkRef} placeholder="Link" />
+                                        <textarea
+        ref={contentRef}
+        placeholder="Paste the actual content (tweet text, article summary, etc.)"
+        className="w-full border border-gray-700 bg-[#071029] text-white rounded p-2 min-h-[100px]"
+    />
                                 </div>
                                 <div>
                                     <h1>Type</h1>
