@@ -45,7 +45,7 @@ export function LandingPage() {
               className="flex items-center gap-2 focus:outline-none"
             >
               <Logo />
-              <span className="text-2xl font-bold text-indigo-400">DigiBrain</span>
+              <span className="text-2xl font-bold text-indigo-500">DigiBrain</span>
             </button>
           </div>
 
@@ -76,7 +76,7 @@ export function LandingPage() {
               <>
                 <button
                   onClick={() => navigate("/dashboard")}
-                  className="px-4 py-2 bg-indigo-500 text-white rounded-md font-medium hover:bg-indigo-500 transition-colors"
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-500 transition-colors"
                 >
                   Dashboard
                 </button>
@@ -86,7 +86,7 @@ export function LandingPage() {
                     try { localStorage.removeItem('auth-storage'); } catch (e) { console.warn('failed to remove auth-storage', e); }
                     navigate('/');
                   }}
-                  className="px-6 py-3 border-2 border-indigo-600 text-indigo-400 rounded-lg font-medium hover:bg-indigo-900/20 transition-all"
+                  className="px-4 py-2 border-2 border-indigo-600 text-indigo-600 rounded-lg font-medium hover:bg-indigo-900/20 transition-all"
                 >
                   Sign Out
                 </button>
@@ -309,7 +309,7 @@ export function LandingPage() {
             <div className="flex justify-center mb-6">
               <button onClick={() => navigate('/')} className="flex items-center gap-2 focus:outline-none">
                 <Logo/>
-                <span className="text-2xl font-bold text-indigo-400">DigiBrain</span>
+                <span className="text-2xl font-bold text-indigo-500">DigiBrain</span>
               </button>
             </div>
             <p className="text-gray-400">Your second brain, powered by AI.</p>
