@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 
 interface ButtonProps {
-    variant: "primary" | "secondary"; 
+    variant: "primary" | "secondary" | "typeButton"; 
     text: string; 
     startIcon?: ReactElement; 
     onClick?: () => void;
@@ -12,6 +12,7 @@ interface ButtonProps {
 const variantClasses = {
     "primary": "bg-indigo-600 text-white",
     "secondary": "bg-indigo-700 text-white/90",
+    "typeButton":"text-white bg-opacity-0 border border-indigo-600"
 };
 
 const defaultStyles = "px-4 py-2 rounded-md font-light flex items-center";
