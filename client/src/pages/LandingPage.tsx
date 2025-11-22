@@ -4,6 +4,7 @@ import { Button } from "../components/Button";
 import { Logo } from "../icons/Logo";
 import { useAuth } from "../store/useAuth";
 import type { AuthState } from "../store/useAuth";
+import heroImage from "../assets/craiyon_220824_image.png";
 
 export function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
@@ -144,8 +145,7 @@ export function LandingPage() {
             </div>
 
             <div className="relative animate-float">
-              
-             <img src="\src\assets\craiyon_220824_image.png" />
+             <img src={heroImage} alt="Hero" className="mx-auto max-w-full h-auto" />
             </div>
           </div>
         </div>

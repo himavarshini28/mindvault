@@ -5,6 +5,7 @@ import axios from "axios";
 import { Logo } from "../icons/Logo.tsx";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/useAuth";
+import signinIllustration from "../assets/access-control-system-abstract-concept.png";
 
 export function Signin() {
     const usernameRef = useRef<HTMLInputElement>(null); 
@@ -104,7 +105,7 @@ export function Signin() {
                     <span className="text-sm font-medium">Back to Home</span>
                 </button>
 
-                <img src="\src\assets\access-control-system-abstract-concept.png"/>
+                <img src={signinIllustration} alt="Sign in illustration" className="max-w-full h-auto"/>
             </div>
         </div>
     );

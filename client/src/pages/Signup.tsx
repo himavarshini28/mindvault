@@ -4,6 +4,7 @@ import api from "../lib/api";
 import axios from "axios";
 import { Logo } from "../icons/Logo.tsx";
 import { useNavigate } from "react-router-dom";
+import signupIllustration from "../assets/user-verification-unauthorized-access-prevention-private-account-authentication-cyber-security-people-entering-login-password-safety-measures.png";
 
 export function Signup() {
     const usernameRef = useRef<HTMLInputElement>(null); 
@@ -120,7 +121,7 @@ export function Signup() {
                     <span className="text-sm font-medium">Back to Home</span>
                 </button>
 
-                <img src="\src\assets\user-verification-unauthorized-access-prevention-private-account-authentication-cyber-security-people-entering-login-password-safety-measures.png"/>
+                <img src={signupIllustration} alt="Signup illustration" className="max-w-full h-auto"/>
             </div>
         </div>
     );
