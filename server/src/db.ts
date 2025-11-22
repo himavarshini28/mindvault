@@ -29,14 +29,14 @@ const tagSchema=new mongoose.Schema(
     }
 )
 
-const contentEnum=["document","tweet","youtube","link"];
+const contentEnum=["document","tweet","youtube","link","linkedin","others"];
 
 const contentSchema=new mongoose.Schema(
     {
         link:
         {
             type:String,
-            required:true
+            required:false
         },
         type:
         {

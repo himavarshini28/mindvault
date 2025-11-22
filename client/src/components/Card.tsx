@@ -39,7 +39,7 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
         <div>
             <div className="p-4 bg-[#0f1724] rounded-md border border-gray-800 max-w-72 min-h-48 min-w-72 text-white">
                 <div className="flex justify-between">
-                    <div className="flex items-center text-md">
+                    <div className="flex items-center pb-1 text-md block w-48 truncate" title={title}>
                        
                         {title}
                     </div>
@@ -59,8 +59,8 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                     </div>
                 </div>
 
-                <div className=" bg-[#071029] rounded-md border border-gray-800 max-w-72 h-[170px] flex flex-col">
-                    <div className="pt-4 flex-1 overflow-auto no-scrollbar text-gray-200">
+                <div className=" bg-[#071029] rounded-md border border-gray-800 max-w-72 h-[150px] flex flex-col">
+                    <div className=" flex-1 overflow-auto no-scrollbar text-gray-200">
                     {type === "youtube" && (
                         <iframe
                             className="w-full"
