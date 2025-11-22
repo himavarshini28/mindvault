@@ -9,7 +9,7 @@ import { LogOut } from "lucide-react";
 import {useUI} from "../store/useUI";
 export function Sidebar() {
     const clear = useAuth((s) => s.clear);
-    const {selectedSection,setSelectedSection}=useUI();
+    const selectedSection = useUI((s) => s.selectedSection);
     const navigate = useNavigate();
     return <div className="h-screen bg-[#0f1724] border-r border-gray-800 w-72 fixed left-0 top-0 pl-6 text-white">
         <div className="flex text-2xl pt-8 items-center">

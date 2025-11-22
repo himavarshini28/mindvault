@@ -15,7 +15,7 @@ declare global {
 interface CardProps {
     title: string;
     link: string;
-    type: "tweet" | "youtube" | "twitter" | "document" | "link";
+    type: "tweet" | "youtube" | "twitter" | "document" | "link" | "linkedin" | "others";
     contentId?: string;
     onDelete?: (contentId: string) => void;
 }
@@ -39,7 +39,7 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
         <div>
             <div className="p-4 bg-[#0f1724] rounded-md border border-gray-800 max-w-72 min-h-48 min-w-72 text-white">
                 <div className="flex justify-between">
-                    <div className="flex items-center pb-1 text-md block w-48 truncate" title={title}>
+                    <div className="flex items-center pb-1 text-md w-48 truncate" title={title}>
                        
                         {title}
                     </div>
