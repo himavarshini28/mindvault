@@ -11,18 +11,15 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
     //@ts-ignore
     const userId=req.userId;
     
-    console.log("Content route - userId from req:", userId);
-    console.log("Content route - body:", {link, type, title, tags, content});
+    
     
     let embedding = undefined;
     if (content && content.trim()) {
-        try {
-            console.log("Generating embedding for content:", content.substring(0, 50) + "...");
-            embedding = await generateEmbedding(content);
-            console.log("Embedding generated successfully, length:", embedding?.length);
-        } catch (embeddingError) {
-            console.error("Embedding generation failed:", embeddingError);
-        }
+            try {
+                embedding = await generateEmbedding(content);
+            } catch (embeddingError) {
+                console.error("Embedding generation failed:", embeddingError);
+            }
     } else {
         console.log("No content provided, skipping embedding generation");
     }
@@ -45,7 +42,7 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
         const incomingType = typeof type === 'string' ? type.toLowerCase().trim() : '';
         const normalizedType = typeMap[incomingType] ?? (incomingType || undefined);
 
-        console.log("Creating content with data:", {link, type: normalizedType, title, tags, userId, hasEmbedding: !!embedding});
+        
         const newContent = await contentModel.create({
             link,
             type: normalizedType,
@@ -55,7 +52,7 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
             content: content || "",
             embedding,
         });
-        console.log("Content created successfully:", newContent._id);
+        
         return res.json({message: "Content created successfully", content: newContent});
     } catch (error) {
         console.error("Content creation error:", error);
@@ -107,22 +104,14 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
         const userId = req.userId;
         const { query } = req.query;
 
-        console.log("Search params - userId:", userId, "query:", query);
 
         if (!query || typeof query !== 'string') {
-            console.log("Search query validation failed");
             return res.status(400).json({ message: "search query is required" });
         }
 
         try {
-            console.log("Generating query embedding for:", query);
             const queryEmbedding = await generateEmbedding(query as string);
-            console.log("Query embedding generated, is array:", Array.isArray(queryEmbedding), "length:", queryEmbedding.length);
-
-            console.log("Performing vector search...");
-
             const userObjectId = new mongoose.Types.ObjectId(userId);
-            console.log("Converted userId to ObjectId:", userObjectId);
 
             const results = await contentModel.aggregate([
                 {
@@ -150,14 +139,10 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
                 },
             ]);
 
-            console.log("Search complete, found", results.length, "results");
-            if (results.length > 0) {
-                console.log("Top result score:", results[0].score);
-                console.log("Lowest result score:", results[results.length - 1].score);
-            }
+            
 
             if (results.length === 0) {
-                console.log("No results found. Checking without score filter...");
+                
                 const allResults = await contentModel.aggregate([
                     {
                         $vectorSearch: {
@@ -179,10 +164,7 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
                         },
                     },
                 ]);
-                console.log("Total results without score filter:", allResults.length);
-                if (allResults.length > 0) {
-                    console.log("Best score available:", allResults[0].score);
-                }
+                
             }
 
             return res.status(200).json({ content: results });
