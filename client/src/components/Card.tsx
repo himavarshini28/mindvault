@@ -5,7 +5,7 @@ import LinkedinIcon from "../icons/LinkedinIcon";
 
 declare global {
     interface Window {
-        twttr?: {
+        twitter?: {
             widgets: {
                 load: () => void;
             };
@@ -23,8 +23,8 @@ interface CardProps {
 
 export function Card({ title, link, type, contentId, onDelete }: CardProps) {
     useEffect(() => {
-        if (window.twttr?.widgets) {
-            window.twttr.widgets.load();
+        if (window.twitter?.widgets) {
+            window.twitter.widgets.load();
         }
     }, [link]);
 
