@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { ShareIcon } from "../icons/ShareIcon";
 import { DeleteIcon } from "../icons/DeleteIcon";
+import LinkedinIcon from "../icons/LinkedinIcon";
 
 declare global {
     interface Window {
@@ -81,11 +82,21 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                         </blockquote>
                     )}
 
+                    
+
                     {(type === "document" || type === "link") && (
                         <div className="text-blue-600 hover:text-blue-800">
                             <a href={link} target="_blank" rel="noopener noreferrer">
                                 View {type === "document" ? "Document" : "Link"} →
                             </a>
+                        </div>
+                    )}
+
+                    {type === "linkedin" && (
+                        <div className="flex items-center justify-center h-full">
+                            <div className="w-16 h-16 rounded bg-white/5 flex items-center justify-center">
+                                <LinkedinIcon />
+                            </div>
                         </div>
                     )}
                     </div>
