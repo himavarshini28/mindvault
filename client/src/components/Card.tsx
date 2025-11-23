@@ -22,11 +22,40 @@ interface CardProps {
 }
 
 export function Card({ title, link, type, contentId, onDelete }: CardProps) {
+    // Ensure twitter widgets script is present and load widgets when link changes
     useEffect(() => {
-        if (window.twitter?.widgets) {
-            window.twitter.widgets.load();
+        type TwttrWindow = { twttr?: { widgets?: { load: () => void } } };
+        const ensureTwitterScript = (): Promise<void> => {
+            return new Promise((resolve) => {
+                const w = window as unknown as TwttrWindow;
+                if (w.twttr && w.twttr.widgets) return resolve();
+                const existing = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
+                if (existing) {
+                    // wait a tick for it to initialize
+                    setTimeout(() => resolve(), 300);
+                    return;
+                }
+                const s = document.createElement('script');
+                s.src = 'https://platform.twitter.com/widgets.js';
+                s.async = true;
+                s.charset = 'utf-8';
+                s.onload = () => setTimeout(() => resolve(), 200);
+                document.body.appendChild(s);
+            });
+        };
+
+        if (type === 'twitter' || type === 'tweet') {
+            ensureTwitterScript().then(() => {
+                try {
+                    const w = window as unknown as TwttrWindow;
+                    //@ts-ignore
+                    w.twttr?.widgets.load();
+                } catch {
+                    // silently ignore
+                }
+            });
         }
-    }, [link]);
+    }, [link, type]);
 
     const handleDelete = () => {
         if (contentId && onDelete) {
@@ -95,7 +124,7 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                     {type === "linkedin" && (
                         <div className="flex items-center justify-center h-full">
                             <div className="w-16 h-16 rounded bg-white/5 flex items-center justify-center">
-                                <LinkedinIcon />
+                                <LinkedinIcon className="w-8 h-8 text-indigo-500" />
                             </div>
                         </div>
                     )}
