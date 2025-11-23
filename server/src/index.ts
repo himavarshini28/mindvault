@@ -9,12 +9,21 @@ import contentRouter from "./routes/contentRoutes.js";
 import shareRoute from "./routes/shareRoute.js";
 const app=express();
 
-app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "token"]
-}));
+// Allow frontend origin(s). Set FRONTEND_URL in production (e.g. https://your-frontend.onrender.com)
+const allowedOrigins = [process.env.FRONTEND_URL ?? "http://localhost:5173", "http://localhost:5174"];
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            // allow requests with no origin (e.g. curl, server-to-server)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.includes(origin)) return callback(null, true);
+            return callback(new Error("CORS not allowed"), false);
+        },
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization", "token"]
+    })
+);
 
 
 
@@ -25,9 +34,10 @@ app.use('',authRouter);
 app.use('',contentRouter);
 app.use('',shareRoute);
 
-app.listen(5000,()=>{
-    console.log("server is running on port 5000");
-})
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`server is running on port ${PORT}`);
+});
 
 
 
