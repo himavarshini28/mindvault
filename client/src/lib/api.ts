@@ -7,7 +7,6 @@ const api = axios.create({
   baseURL: BACKEND_URL,
 });
 
-// Attach token from zustand store to every request
 api.interceptors.request.use((config) => {
   const token = useAuth.getState().token;
   if (token) {

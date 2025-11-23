@@ -13,11 +13,10 @@ interface Content {
 
 export function useContent() {
     const [contents, setContents] = useState<Content[]>([]);
-    // Subscribe to selectedSection using selector to avoid unnecessary re-renders
     const selectedSection = useUI((s) => s.selectedSection);
 
     const refresh = useCallback(() => {
-        // normalize UI selection to backend type values
+        
         const selection = selectedSection ? selectedSection.toString() : "";
         const sel = selection.toLowerCase();
         const typeMap: Record<string, string> = {
@@ -31,10 +30,7 @@ export function useContent() {
 
         api
             .get(`/api/v1/content`, {
-                params: {
-                    // send `type` only when a specific section (not 'all') is selected
-                    type: normalized,
-                },
+                params: { type: normalized },
             })
             .then((response: { data: { content: Content[] } }) => {
                 setContents(response.data.content || []);
@@ -45,10 +41,8 @@ export function useContent() {
     }, [selectedSection]);
 
     useEffect(() => {
-        // immediate load when selectedSection changes (or on mount)
         refresh();
 
-        // polling (keeps refreshing every 10s)
         const interval = setInterval(() => {
             refresh();
         }, 10 * 1000);

@@ -8,7 +8,6 @@ import heroImage from "../assets/craiyon_220824_image.png";
 
 export function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
-  // derive sign-in state from the zustand store
   const token = useAuth((s: AuthState) => s.token);
   const isSignedIn = !!token;
   const navigate = useNavigate();
@@ -21,9 +20,7 @@ export function LandingPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    // no-op: token comes from zustand and will cause re-renders when it changes
-  }, [token]);
+  useEffect(() => {}, [token]);
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
