@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import { ShareIcon } from "../icons/ShareIcon";
 import { DeleteIcon } from "../icons/DeleteIcon";
 import LinkedinIcon from "../icons/LinkedinIcon";
+import LinkIcon from "../icons/linkIcon";
 
 declare global {
     interface Window {
-        twitter?: {
+        twttr?: {
             widgets: {
                 load: () => void;
             };
@@ -22,40 +23,11 @@ interface CardProps {
 }
 
 export function Card({ title, link, type, contentId, onDelete }: CardProps) {
-    // Ensure twitter widgets script is present and load widgets when link changes
     useEffect(() => {
-        type TwttrWindow = { twttr?: { widgets?: { load: () => void } } };
-        const ensureTwitterScript = (): Promise<void> => {
-            return new Promise((resolve) => {
-                const w = window as unknown as TwttrWindow;
-                if (w.twttr && w.twttr.widgets) return resolve();
-                const existing = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]');
-                if (existing) {
-                    // wait a tick for it to initialize
-                    setTimeout(() => resolve(), 300);
-                    return;
-                }
-                const s = document.createElement('script');
-                s.src = 'https://platform.twitter.com/widgets.js';
-                s.async = true;
-                s.charset = 'utf-8';
-                s.onload = () => setTimeout(() => resolve(), 200);
-                document.body.appendChild(s);
-            });
-        };
-
-        if (type === 'twitter' || type === 'tweet') {
-            ensureTwitterScript().then(() => {
-                try {
-                    const w = window as unknown as TwttrWindow;
-                    //@ts-ignore
-                    w.twttr?.widgets.load();
-                } catch {
-                    // silently ignore
-                }
-            });
+        if (window.twttr?.widgets) {
+            window.twttr.widgets.load();
         }
-    }, [link, type]);
+    }, [link]);
 
     const handleDelete = () => {
         if (contentId && onDelete) {
@@ -106,7 +78,7 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                     )}
 
                     {(type === "twitter" || type === "tweet") && (
-                        <blockquote className="twitter-tweet">
+                        <blockquote className="twitter-tweet ">
                             <a href={link.replace("x.com", "twitter.com")}></a>
                         </blockquote>
                     )}
@@ -114,20 +86,26 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                     
 
                     {(type === "document" || type === "link") && (
-                        <div className="text-blue-600 hover:text-blue-800">
-                            <a href={link} target="_blank" rel="noopener noreferrer">
-                                View {type === "document" ? "Document" : "Link"} →
+                        <div className="flex items-center justify-center h-full">
+                            <a href={link} target="_blank" rel="noopener noreferrer" className="rounded w-full h-full flex items-center justify-center flex-col p-2">
+                                <div className="flex items-center justify-center">
+                                    <LinkIcon aria-label="Link logo" className="w-10 h-10 text-blue-400" />
+                                </div>
+                                <div className="mt-2 text-xs text-gray-300 truncate max-w-full text-center">
+                                    {link ? (link.length > 100 ? `${link.slice(0, 100)}...` : link) : ''}
+                                </div>
                             </a>
                         </div>
                     )}
 
                     {type === "linkedin" && (
-                        <div className="flex items-center justify-center h-full">
-                            <div className="w-16 h-16 rounded bg-white/5 flex items-center justify-center">
-                                <LinkedinIcon className="w-8 h-8 text-indigo-500" />
+                            <div className="flex items-center justify-center h-full">
+                                <div className=" rounded w-full h-full bg- flex items-center justify-center flex-col">
+                                    <LinkedinIcon aria-label="LinkedIn logo" className="w-10 h-10 text-blue-600" />
+                                     <div className="mt-2 text-xs text-gray-300 truncate max-w-full text-center">{title.trim()}</div>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
                     </div>
                 </div>
             </div>

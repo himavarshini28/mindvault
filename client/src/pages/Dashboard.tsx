@@ -91,28 +91,35 @@ export function Dashboard() {
           
           <Button onClick={async () => {
               try {
-          const response = await api.post(`/api/v1/share/brain`, { share: true });
-                  const shareUrl = `http://localhost:5173/share/${response.data.hash}`;
-                  alert(shareUrl);
+                const response = await api.post(`/api/v1/share/brain`, { share: true });
+                // When using HashRouter the share URL must include the hash fragment so it opens the SPA route
+                const shareUrl = `${window.location.origin}/#/share/${response.data.hash}`;
+                alert(shareUrl);
               } catch (error) {
-                  console.error("Error sharing brain:", error);
-                  alert("Failed to generate share link. Please try again.");
+                console.error("Error sharing brain:", error);
+                alert("Failed to generate share link. Please try again.");
               }
           }} variant="secondary" text="Share brain" startIcon={<ShareIcon />} />
         </div>
         </div>
 
         <div className="flex gap-4 flex-wrap pt-5">
-          {(isSearching ? searchResults:contents).map((content) => (
-            <Card 
+          {(isSearching ? searchResults:contents).map((content) => {
+            // debug: log the content type so we can confirm LinkedIn items use the expected "linkedin" value
+            // remove this log after diagnosis
+            // eslint-disable-next-line no-console
+            console.debug("content.type:", content._id, content.type);
+            return (
+              <Card 
                 key={content._id || content.link} 
                 type={content.type} 
                 link={content.link} 
                 title={content.title}
                 contentId={content._id}
                 onDelete={handleDelete}
-            />
-          ))}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

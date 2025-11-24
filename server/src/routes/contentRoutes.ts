@@ -173,4 +173,36 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
             return res.status(500).json({ message: "Error performing search", err });
         }
     });
+    contentRouter.delete("/api/v1/content", authMiddleware, async (req, res) => {
+        //@ts-ignore
+        const userId = req.userId;
+        const { contentId } = req.body;
+
+        if (!contentId) {
+            return res.status(400).json({ message: "contentId is required" });
+        }
+
+        try {
+            let idFilter: any = contentId;
+            try {
+                idFilter = new mongoose.Types.ObjectId(contentId);
+            } catch (e) {
+            }
+
+            const content = await contentModel.findOne({ _id: idFilter });
+            if (!content) {
+                return res.status(404).json({ message: "Content not found" });
+            }
+
+            if (String(content.userId) !== String(userId)) {
+                return res.status(403).json({ message: "Not authorized to delete this content" });
+            }
+
+            await contentModel.deleteOne({ _id: content._id });
+            return res.status(200).json({ message: "Content deleted" });
+        } catch (err) {
+            console.error("Error deleting content:", err);
+            return res.status(500).json({ message: "Error deleting content", err: String(err) });
+        }
+    });
 export default contentRouter;
