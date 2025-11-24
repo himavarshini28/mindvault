@@ -35,8 +35,8 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
             youtube: 'youtube',
             video: 'youtube',
             linkedin: 'linkedin',
-            link: 'link',
-            document: 'document',
+            link: 'others',
+            document: 'others',
             others: 'others',
         };
         const incomingType = typeof type === 'string' ? type.toLowerCase().trim() : '';
@@ -78,22 +78,28 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
 
             if (type && typeof type === 'string' && type.trim() && type !== 'all') {
                 const t = type.toLowerCase().trim();
-                const typeMap: Record<string, string> = {
-                    tweet: 'tweet',
-                    tweets: 'tweet',
-                    twitter: 'tweet',
-                    youtube: 'youtube',
-                    video: 'youtube',
-                    linkedin: 'linkedin',
-                    link: 'link',
-                    document: 'document',
-                    others: 'others',
-                };
-                filter.type = typeMap[t] ?? t;
+                if (t === 'others' || t === 'link' || t === 'document') {
+                    filter.type = { $in: ['others', 'link', 'document'] };
+                } else {
+                    const typeMap: Record<string, string> = {
+                        tweet: 'tweet',
+                        tweets: 'tweet',
+                        twitter: 'tweet',
+                        youtube: 'youtube',
+                        video: 'youtube',
+                        linkedin: 'linkedin',
+                    };
+                    filter.type = typeMap[t] ?? t;
+                }
             }
 
-            const content = await contentModel.find(filter).sort({ createdAt: -1 });
-            return res.status(200).json({content});
+            const contentDocs = await contentModel.find(filter).sort({ createdAt: -1 }).lean();
+            const normalized = contentDocs.map((c: any) => ({
+                ...c,
+                type: c.type === 'link' || c.type === 'document' ? 'others' : c.type,
+            }));
+
+            return res.status(200).json({ content: normalized });
         } catch(err) {
             console.error('Error fetching content:', err);
             return res.status(500).json({message: String(err)});

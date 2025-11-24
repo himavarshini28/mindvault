@@ -22,7 +22,7 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
-  const [type, setType] = useState<string>(ContentType.Youtube);
+  const [type, setType] = useState<string>(ContentType.Others);
 
   async function addContent() {
     const title = titleRef.current?.value;
@@ -99,7 +99,7 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                 </div>
                 <div className="px-4">
                   <h1 className="pb-2">Type :</h1>
-                  <div className="flex gap-1 justify-center pb-2">
+                    <div className="flex gap-1 justify-center pb-2 flex-wrap">
                     <Button
                       text="Youtube"
                       variant={
@@ -121,6 +121,7 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                       }
                       onClick={() => setType(ContentType.LinkedIn)}
                     />
+                      {/* Document/Link types are removed; they are treated as 'Others' */}
                     <Button
                       text="Others"
                       variant={

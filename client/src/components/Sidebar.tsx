@@ -7,6 +7,7 @@ import { SidebarItem } from "./SidebarItem";
 import { useAuth } from "../store/useAuth";
 import { LogOut } from "lucide-react";
 import {useUI} from "../store/useUI";
+import LinkIcon from "../icons/linkIcon";
 export function Sidebar() {
     const clear = useAuth((s) => s.clear);
     const selectedSection = useUI((s) => s.selectedSection);
@@ -22,6 +23,7 @@ export function Sidebar() {
             <SidebarItem text="Twitter" value="twitter" icon={<TwitterIcon />} selected={selectedSection === 'twitter'} />
             <SidebarItem text="Youtube" value="youtube" icon={<YoutubeIcon />} selected={selectedSection === 'youtube'} />
             <SidebarItem text="LinkedIn" value="linkedin" icon={<LinkedinIcon/>} selected={selectedSection === 'linkedin'} />
+            <SidebarItem text="Others" value="others" icon={<LinkIcon className="w-5 h-5 text-gray-300"/>} selected={selectedSection === 'others'} />
             <div className="mt-5 px-1 flex items-center">
                 
                 <button

@@ -105,9 +105,6 @@ export function Dashboard() {
 
         <div className="flex gap-4 flex-wrap pt-5">
           {(isSearching ? searchResults:contents).map((content) => {
-            // debug: log the content type so we can confirm LinkedIn items use the expected "linkedin" value
-            // remove this log after diagnosis
-            // eslint-disable-next-line no-console
             console.debug("content.type:", content._id, content.type);
             return (
               <Card 

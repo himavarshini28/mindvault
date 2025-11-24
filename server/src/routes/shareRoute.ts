@@ -44,7 +44,6 @@ shareRoute.get("/api/v1/brain/:shareLink", async (req, res) => {
         return;
     }
 
-    // normalize legacy types (link/document) to 'others' for consistency
     const normalizedContent = (content || []).map((c: any) => ({
         ...c.toObject?.() ?? c,
         type: c.type === 'link' || c.type === 'document' ? 'others' : c.type,

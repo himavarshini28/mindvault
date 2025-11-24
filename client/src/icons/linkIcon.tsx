@@ -3,14 +3,14 @@ import type { SVGProps } from 'react';
 type Props = SVGProps<SVGSVGElement> & { className?: string };
 
 const LinkIcon = ({ className = 'text-gray-300', ...rest }: Props) => {
-  const combined = `${className}`.trim();
+  const combined = ` ${className}`.trim();
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       width="24"
       height="24"
-      fill="currentColor"
+      fill="none"
       stroke="currentColor"
       strokeWidth={1.5}
       className={combined}

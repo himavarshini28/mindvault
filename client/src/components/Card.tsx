@@ -37,13 +37,12 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
             }
         }
     };
-    // normalize legacy types to 'others' for rendering
     const normalizedType = type === "link" || type === "document" ? "others" : type;
 
     return (
         <div>
             <div className="p-4 bg-[#0f1724] rounded-md border border-gray-800 max-w-72 min-h-48 min-w-72 text-white relative">
-                {/* action buttons placed absolute so the clickable area can be a single anchor */}
+                
                 <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
                     <button
                         onClick={(e) => {
@@ -66,7 +65,7 @@ export function Card({ title, link, type, contentId, onDelete }: CardProps) {
                     )}
                 </div>
 
-                {/* clickable area */}
+                
                 <a href={link} target="_blank" rel="noopener noreferrer" className="block">
                     <div className="flex items-center pb-1 text-md w-48 truncate px-1" title={title}>
                         {title}
