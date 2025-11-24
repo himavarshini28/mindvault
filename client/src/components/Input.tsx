@@ -12,7 +12,7 @@ export function Input({placeholder, reference}: InputProps) {
                 ref={reference}
                 placeholder={placeholder}
                 type={"text"}
-                className="px-4 py-2 border border-gray-700 bg-[#071029] text-white rounded m-2 w-[350px]"
+                className="px-4 py-2 border border-gray-700 bg-[#071029] text-white rounded m-2 w-[400px]"
             />
         </div>
     );

@@ -82,7 +82,7 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
           <div className="w-screen h-screen bg-black/60 fixed top-0 left-0 opacity-100 flex justify-center z-50"></div>
           <div className="w-screen h-screen fixed top-0 left-0 flex justify-center z-50">
             <div className="flex items-center  justify-center ">
-              <span className="bg-[#0f1724] opacity-100 p-4 rounded fixed border border-gray-800 text-white w-[400px] z-50">
+              <span className="bg-[#0f1724] opacity-100 p-4 rounded fixed border border-gray-800 text-white w-[450px] z-50">
                 <div className="flex justify-end">
                   <div onClick={onClose} className="cursor-pointer">
                     <CrossIcon />
@@ -94,12 +94,12 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                   <textarea
                     ref={contentRef}
                     placeholder="write notes here (tweet text, article summary, etc.)"
-                    className="w-[350px] px-2 m-2 border border-gray-700 bg-[#071029] text-white rounded p-2 min-h-[100px]"
+                    className="w-[400px] px-2 m-2 border border-gray-700 bg-[#071029] text-white rounded p-2 min-h-[100px]"
                   />
                 </div>
                 <div className="px-4">
                   <h1 className="pb-2">Type :</h1>
-                    <div className="flex gap-1 justify-center pb-2 flex-wrap">
+                    <div className="flex gap-2 justify-center pb-2 flex-wrap">
                     <Button
                       text="Youtube"
                       variant={
@@ -121,7 +121,7 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                       }
                       onClick={() => setType(ContentType.LinkedIn)}
                     />
-                      {/* Document/Link types are removed; they are treated as 'Others' */}
+                     
                     <Button
                       text="Others"
                       variant={
@@ -131,7 +131,7 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                     />
                   </div>
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center pt-2">
                   <Button
                     onClick={addContent}
                     variant="primary"
