@@ -1,5 +1,5 @@
 import api from "../lib/api";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useUI } from "../store/useUI";
 
 interface Content {
@@ -47,17 +47,7 @@ export function useContent() {
             });
     }, [selectedSection]);
 
-    useEffect(() => {
-        refresh();
-
-        const interval = setInterval(() => {
-            refresh();
-        }, 10 * 1000);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [refresh]);
+   
 
     return { contents, refresh };
 }

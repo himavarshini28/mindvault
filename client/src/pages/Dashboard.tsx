@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "../components/Button"
 import { Card } from "../components/Card"
 import { CreateContentModal } from "../components/CreateContentModal"
@@ -7,6 +7,7 @@ import { ShareIcon } from "../icons/ShareIcon"
 import { Sidebar } from "../components/Sidebar"
 import { useContent } from "../hooks/useContent"
 import api from "../lib/api";
+import { copyToClipBoard } from "../lib/utils"
 
 interface Content {
   _id: string;
@@ -23,6 +24,11 @@ export function Dashboard() {
   const [searchQuery,setSearchQuery]=useState("");
   const [searchResults,setSearchResults]=useState<Content[]>([]);
   const [isSearching,setIsSearching]=useState(false);
+  const [sharedUrl,setSharedUrl]=useState<string | null>();
+  const [copied,setCopied]=useState(false);
+  const inputRef=useRef<HTMLInputElement|null>(null)
+
+  
 
   const handleSearch=async()=>{
     if(!searchQuery.trim())
@@ -43,6 +49,8 @@ export function Dashboard() {
     }
   };
 
+
+
   const handleClearSearch=async()=>{
     setIsSearching(false);
     setSearchQuery("");
@@ -51,7 +59,24 @@ export function Dashboard() {
 
   useEffect(() => {
     refresh();
-  }, [modalOpen, refresh])
+  }, [refresh]);
+
+  useEffect(()=>{
+    if(sharedUrl && inputRef.current)
+    {
+      inputRef.current.focus();
+      inputRef.current.select();
+      setCopied(false);
+    }
+  },[sharedUrl])
+
+  useEffect(()=>{
+    function onKey(e:KeyboardEvent){
+      if(e.key=="Escape") setSharedUrl(null);
+    }
+    window.addEventListener("keydown",onKey);
+    return ()=> window.removeEventListener("keydown",onKey);
+  },[])
 
   const handleDelete = async (contentId: string) => {
     try {
@@ -67,12 +92,38 @@ export function Dashboard() {
     }
   };
 
+  const handleSharedBrain=async()=>{
+  
+              try {
+                const response = await api.post(`/api/v1/share/brain`, { share: true });
+                const url = `${window.location.origin}/#/share/${response.data.hash}`;
+                setSharedUrl(url);
+              } catch (error) {
+                console.error("Error sharing brain:", error);
+                alert("Failed to generate share link. Please try again.");
+              }
+          }
+  const handleCopyClick = async () => {
+    if (!sharedUrl) return;
+    const ok = await copyToClipBoard(sharedUrl);
+    setCopied(ok);
+    // auto-clear feedback after a second
+    if (ok) setTimeout(() => setCopied(false), 1500);
+  };
+
     return (
     <div>
       <Sidebar />
       
       <div className="p-4 ml-72 min-h-screen bg-[#071029] border-2 border-gray-800 text-white">
-        <CreateContentModal open={modalOpen} onClose={() => setModalOpen(false)} />
+        <CreateContentModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onSuccess={() => {
+            setModalOpen(false);
+            refresh();
+          }}
+        />
           <div className="flex justify-end">
           <div className="flex gap-2 px-4">
             <input placeholder="search: e.g., 'tweet about DigiBrain'" value={searchQuery}
@@ -89,17 +140,7 @@ export function Dashboard() {
         <div className="flex justify-end gap-4">
           <Button onClick={() => setModalOpen(true)} variant="primary" text="Add content" startIcon={<PlusIcon />} />
           
-          <Button onClick={async () => {
-              try {
-                const response = await api.post(`/api/v1/share/brain`, { share: true });
-                // When using HashRouter the share URL must include the hash fragment so it opens the SPA route
-                const shareUrl = `${window.location.origin}/#/share/${response.data.hash}`;
-                alert(shareUrl);
-              } catch (error) {
-                console.error("Error sharing brain:", error);
-                alert("Failed to generate share link. Please try again.");
-              }
-          }} variant="secondary" text="Share brain" startIcon={<ShareIcon />} />
+          <Button onClick={handleSharedBrain}variant="secondary" text="Share brain" startIcon={<ShareIcon />} />
         </div>
         </div>
 
@@ -119,6 +160,65 @@ export function Dashboard() {
           })}
         </div>
       </div>
+      {/* Share dialog */}
+
+      {sharedUrl && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          aria-modal="true"
+          role="dialog"
+        >
+           <div
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setSharedUrl(null)}
+          />
+           <div className="relative z-10 w-full max-w-lg mx-4">
+            <div className="bg-[#071029] border border-gray-800 rounded-lg p-5 shadow-lg text-white pb-7">
+              <div className="flex items-start justify-between gap-4">
+                <h3 className="text-xl font-semibold">Share your brain</h3>
+                <button
+                  aria-label="Close"
+                  onClick={() => setSharedUrl(null)}
+                  className="text-gray-400 hover:text-gray-200"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <p className="mt-2 text-sm text-gray-300">
+                Use the URL below to share a read-only view of your brain.
+              </p>
+
+              <div className="mt-4 flex gap-2 items-center">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  readOnly
+                  value={sharedUrl}
+                  className="flex-1 px-3 py-2 bg-[#071029] border border-gray-700 rounded-md text-sm text-gray-100"
+                  aria-label="Share URL"
+                />
+                <button
+                  onClick={handleCopyClick}
+                   className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-md text-sm"
+                >
+                  {copied ? "Copied!" : "Copy"}
+                </button>
+                <button
+                  onClick={() => {
+                    // open in new tab if user wants to preview
+                    window.open(sharedUrl, "_blank", "noopener,noreferrer");
+                  }}
+                  className="px-3 py-2 bg-transparent border border-gray-700 rounded-md text-sm text-gray-200 hover:bg-gray-800"
+                >
+                  Open
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

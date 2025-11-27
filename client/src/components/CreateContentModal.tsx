@@ -16,9 +16,10 @@ const ContentType = {
 interface CreateContentModalProps {
   open: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
+export function CreateContentModal({ open, onClose, onSuccess }: CreateContentModalProps) {
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
@@ -57,8 +58,8 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
       if (titleRef.current) titleRef.current.value = "";
       if (linkRef.current) linkRef.current.value = "";
       if (contentRef.current) contentRef.current.value = "";
+      onSuccess?.();
       onClose();
-      alert("Content added successfully!");
     } catch (error: unknown) {
       console.error("Error adding content:", error);
       if (axios.isAxiosError(error)) {
