@@ -8,6 +8,7 @@ import { Sidebar } from "../components/Sidebar"
 import { useContent } from "../hooks/useContent"
 import api from "../lib/api";
 import { copyToClipBoard } from "../lib/utils"
+import LinkIcon from "../icons/linkIcon"
 
 interface Content {
   _id: string;
@@ -65,7 +66,6 @@ export function Dashboard() {
     if(sharedUrl && inputRef.current)
     {
       inputRef.current.focus();
-      inputRef.current.select();
       setCopied(false);
     }
   },[sharedUrl])
@@ -189,31 +189,38 @@ export function Dashboard() {
                 Use the URL below to share a read-only view of your brain.
               </p>
 
-              <div className="mt-4 flex gap-2 items-center">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  readOnly
-                  value={sharedUrl}
-                  className="flex-1 px-3 py-2 bg-[#071029] border border-gray-700 rounded-md text-sm text-gray-100"
-                  aria-label="Share URL"
-                />
-                <button
-                  onClick={handleCopyClick}
-                   className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-md text-sm"
-                >
-                  {copied ? "Copied!" : "Copy"}
-                </button>
-                <button
-                  onClick={() => {
-                    // open in new tab if user wants to preview
-                    window.open(sharedUrl, "_blank", "noopener,noreferrer");
-                  }}
-                  className="px-3 py-2 bg-transparent border border-gray-700 rounded-md text-sm text-gray-200 hover:bg-gray-800"
-                >
-                  Open
-                </button>
-              </div>
+            <div className="mt-4 flex gap-2 items-center">
+
+  <div className="relative flex-1">
+    <input
+      ref={inputRef}
+      type="text"
+      readOnly
+      value={sharedUrl}
+      className="w-full pr-10 px-3 py-2 bg-[#071029] border border-indigo-600 
+                 rounded-md text-sm text-gray-100 focus:border-indigo-600 
+                 focus:outline-none focus:ring-0 focus:border-2"
+      aria-label="Share URL"
+    />
+    <button
+      onClick={() => window.open(sharedUrl!, "_blank", "noopener,noreferrer")}
+      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white"
+      aria-label="Open link"
+    >
+      <LinkIcon className="w-5 h-5" />
+    </button>
+  </div>
+
+  {/* Copy button */}
+  <button
+    onClick={handleCopyClick}
+    className="px-3 py-2 w-20 bg-indigo-600 hover:bg-indigo-500 rounded-md text-sm"
+  >
+    {copied ? "Copied!" : "Copy"}
+  </button>
+
+</div>
+
 
             </div>
           </div>
