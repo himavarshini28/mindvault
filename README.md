@@ -34,11 +34,7 @@
 - **Private Collections** - Your data, your control
 - **Shareable Links** - Generate read-only share links for collaboration
 
-### 🎨 Beautiful Design
-- **Glassmorphism Effects** - Modern, translucent UI elements
-- **Smooth Animations** - Delightful micro-interactions throughout
-- **Gradient Accents** - Subtle color gradients for depth
-- **Shimmer Loading** - Premium loading experience
+
 
 ---
 
@@ -209,11 +205,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 👤 Author
 
