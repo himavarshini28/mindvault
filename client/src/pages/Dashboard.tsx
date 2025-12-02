@@ -9,6 +9,7 @@ import { useContent } from "../hooks/useContent"
 import api from "../lib/api";
 import { copyToClipBoard } from "../lib/utils"
 import LinkIcon from "../icons/linkIcon"
+import { SkeletonCard } from "../components/SkeletonCard";
 
 interface Content {
   _id: string;
@@ -21,7 +22,7 @@ interface Content {
 
 export function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
-  const {contents, refresh} = useContent();
+  const {contents, refresh,loading} = useContent();
   const [searchQuery,setSearchQuery]=useState("");
   const [searchResults,setSearchResults]=useState<Content[]>([]);
   const [isSearching,setIsSearching]=useState(false);
@@ -107,7 +108,6 @@ export function Dashboard() {
     if (!sharedUrl) return;
     const ok = await copyToClipBoard(sharedUrl);
     setCopied(ok);
-    // auto-clear feedback after a second
     if (ok) setTimeout(() => setCopied(false), 1500);
   };
 
@@ -145,19 +145,23 @@ export function Dashboard() {
         </div>
 
         <div className="flex gap-4 flex-wrap pt-5">
-          {(isSearching ? searchResults:contents).map((content) => {
-            console.debug("content.type:", content._id, content.type);
-            return (
-              <Card 
-                key={content._id || content.link} 
-                type={content.type} 
-                link={content.link} 
-                title={content.title}
-                contentId={content._id}
-                onDelete={handleDelete}
-              />
-            );
-          })}
+          {loading && contents.length === 0 ? (
+            Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+          ) : (
+            (isSearching ? searchResults : contents).map((content) => {
+              console.debug("content.type:", content._id, content.type);
+              return (
+                <Card 
+                  key={content._id || content.link} 
+                  type={content.type} 
+                  link={content.link} 
+                  title={content.title}
+                  contentId={content._id}
+                  onDelete={handleDelete}
+                />
+              );
+            })
+          )}
         </div>
       </div>
       {/* Share dialog */}
@@ -185,7 +189,7 @@ export function Dashboard() {
                 </button>
               </div>
 
-              <p className="mt-2 text-sm text-gray-300">
+              <p className="mt-2 text-sm text-gray-600">
                 Use the URL below to share a read-only view of your brain.
               </p>
 
@@ -211,7 +215,6 @@ export function Dashboard() {
     </button>
   </div>
 
-  {/* Copy button */}
   <button
     onClick={handleCopyClick}
     className="px-3 py-2 w-20 bg-indigo-600 hover:bg-indigo-500 rounded-md text-sm"
@@ -220,8 +223,6 @@ export function Dashboard() {
   </button>
 
 </div>
-
-
             </div>
           </div>
         </div>

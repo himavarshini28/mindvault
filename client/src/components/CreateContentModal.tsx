@@ -5,6 +5,7 @@ import { Input } from "./Input";
 import api from "../lib/api";
 import axios from "axios";
 import { useAuth } from "../store/useAuth";
+import { useAsync } from "../hooks/useAsync";
 
 const ContentType = {
   Youtube: "youtube",
@@ -24,6 +25,7 @@ export function CreateContentModal({ open, onClose, onSuccess }: CreateContentMo
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
   const [type, setType] = useState<string>(ContentType.Others);
+  const { loading, run } = useAsync();
 
   async function addContent() {
     const title = titleRef.current?.value;
@@ -43,7 +45,7 @@ export function CreateContentModal({ open, onClose, onSuccess }: CreateContentMo
         return;
       }
 
-      await api.post(
+      await run(()=>api.post(
         `/api/v1/content`,
         {
           link,
@@ -53,7 +55,7 @@ export function CreateContentModal({ open, onClose, onSuccess }: CreateContentMo
           content,
         },
         {}
-      );
+      ));
 
       if (titleRef.current) titleRef.current.value = "";
       if (linkRef.current) linkRef.current.value = "";
@@ -134,8 +136,10 @@ export function CreateContentModal({ open, onClose, onSuccess }: CreateContentMo
                 </div>
                 <div className="flex justify-center pt-2">
                   <Button
+                    classname="w-[100px] id-over-inverse"
                     onClick={addContent}
                     variant="primary"
+                    loading={loading}
                     text="Submit"
                   />
                 </div>
