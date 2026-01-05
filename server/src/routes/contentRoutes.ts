@@ -125,8 +125,8 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
                         index: "vector_index",
                         path: "embedding",
                         queryVector: queryEmbedding,
-                        numCandidates: 50,
-                        limit: 10,
+                        numCandidates: 200,  // Increased for better recall
+                        limit: 20,            // Get more results before filtering
                     },
                 },
                 {
@@ -137,11 +137,14 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
                 {
                     $match: {
                         userId: userObjectId,
-                        score: { $gte: 0.75 },
+                        score: { $gte: 0.6 },  // Lowered threshold for more results
                     },
                 },
                 {
                     $sort: { score: -1 },
+                },
+                {
+                    $limit: 10  // Return top 10 after filtering
                 },
             ]);
 
@@ -155,7 +158,7 @@ contentRouter.post("/api/v1/content",authMiddleware,async(req,res)=>{
                             index: "vector_index",
                             path: "embedding",
                             queryVector: queryEmbedding,
-                            numCandidates: 10,
+                            numCandidates: 150,  // Increased for fallback
                             limit: 10,
                         },
                     },

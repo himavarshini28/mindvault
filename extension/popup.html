@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigiBrain Capture</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+ 
+  <div class="container">
+    
+    <div class="header">
+      <h1>🧠 DigiBrain</h1>
+      <p class="subtitle">Save to your brain</p>
+    </div>
+
+    <!-- 
+      LOGIN CHECK SECTION
+    -->
+    <div id="notLoggedIn" class="hidden">
+      <div class="warning">
+        <p>⚠️ Please log in to your DigiBrain account first</p>
+        <button id="loginBtn" class="btn-secondary">Open DigiBrain</button>
+      </div>
+    </div>
+
+    
+    <div id="loggedIn" class="hidden">
+      
+      <!-- Current Page Info -->
+      <div class="section">
+        <label class="label">Current Page:</label>
+        <div class="page-info">
+          <div class="page-title" id="pageTitle">Loading...</div>
+          <div class="page-url" id="pageUrl">Loading...</div>
+        </div>
+      </div>
+
+      <!-- Optional Tags Input -->
+      <div class="section">
+        <label class="label" for="tagsInput">
+          Tags (optional)
+          <span class="hint">Separate with commas</span>
+        </label>
+        <input 
+          type="text" 
+          id="tagsInput" 
+          placeholder="e.g., tutorial, javascript, learning"
+          class="input"
+        />
+      </div>
+
+      <!-- Type Selection -->
+      <div class="section">
+        <label class="label" for="typeSelect">Type:</label>
+        <select id="typeSelect" class="input">
+          <option value="others">Article/Link</option>
+          <option value="youtube">YouTube Video</option>
+          <option value="tweet">Tweet</option>
+          <option value="linkedin">LinkedIn Post</option>
+        </select>
+      </div>
+
+      <!-- Save Button -->
+      <button id="saveBtn" class="btn-primary">
+        <span id="saveBtnText">💾 Save to DigiBrain</span>
+        <span id="saveBtnLoader" class="hidden">⏳ Saving...</span>
+      </button>
+
+      <!-- Status Messages -->
+      <div id="statusMessage" class="hidden"></div>
+    </div>
+
+  </div>
+
+  
+  <script src="popup.js"></script>
+</body>
+</html>
