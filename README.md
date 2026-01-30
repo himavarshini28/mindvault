@@ -1,5 +1,5 @@
-# 🧠 MindVault
-
+# 🧠 DigiBrain
+>MindVault is now DigiBrain
 > Your personal digital brain - capture, organize, and share knowledge effortlessly
 
 <div align="center">
